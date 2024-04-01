@@ -742,9 +742,6 @@ fn check_type_declaration(
     enum_decl: &EnumDeclaration<Expression>,
     state: &mut State<'_>,
 ) -> Result<(), String> {
-    // If we add generic types, the type variables need to be added
-    // in a way similar to local variables in expressions.
-
     enum_decl.variants.iter().try_fold(
         BTreeSet::default(),
         |mut acc, EnumVariant { name, .. }| {
@@ -754,20 +751,14 @@ fn check_type_declaration(
         },
     )?;
 
+    let type_vars = enum_decl.type_vars.vars().collect::<HashSet<_>>();
+
     enum_decl
         .variants
         .iter()
         .flat_map(|v| v.fields.iter())
         .flat_map(|v| v.iter())
-        .try_for_each(|ty| {
-            check_type(
-                location,
-                ty,
-                state,
-                &Default::default(),
-                &Default::default(),
-            )
-        })
+        .try_for_each(|ty| check_type(location, ty, state, &type_vars, &Default::default()))
 }
 
 fn check_type_scheme(
