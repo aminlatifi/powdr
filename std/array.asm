@@ -46,13 +46,13 @@ let<T> split_slice: Slice<T> -> (Slice<T>, Slice<T>) = |s| match s {
         )
     }
 };
-let<T> slice_pop: Slice<T> -> (Slice<T>, std::util::Option<T>) = |s| match s {
-    Slice::S(_, _, 0) => (s, std::util::Option::None),
-    Slice::S(arr, start, len) => (Slice::S(arr, start, len - 1), std::util::Option::Some(arr[start + len - 1])),
+let<T> slice_pop: Slice<T> -> (Slice<T>, std::utils::Option<T>) = |s| match s {
+    Slice::S(_, _, 0) => (s, std::utils::Option::None),
+    Slice::S(arr, start, len) => (Slice::S(arr, start, len - 1), std::utils::Option::Some(arr[start + len - 1])),
 };
 
 mod internal {
-    use std::util::Option;
+    use std::utils::Option;
 
     let<T> sort: Slice<T>, (T, T -> bool) -> T[] = |slice, lt| match slice {
         Slice::S(_, _, 0) => [],
